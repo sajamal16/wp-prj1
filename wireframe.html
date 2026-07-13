@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Planner — Wireframes</title>
+<style>
+/* === Base Framework CSS — shared across all wireframe outputs === */
+
+/* Reset & Layout */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; color: #333; }
+
+.page-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Title Bar */
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px 8px 0 0;
+  font-size: 14px;
+  color: #333;
+}
+.title-bar .rec { color: #666; font-size: 13px; }
+
+/* Main Tabs */
+.main-tabs {
+  display: flex;
+  background: #fff;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  overflow-x: auto;
+}
+.tab-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  color: #666;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tab-btn:hover { color: #333; background: #f9f9f9; }
+.tab-btn.active { color: #000; border-bottom-color: #000; font-weight: 600; }
+
+/* Option Panels */
+.option-panel {
+  display: none;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  padding: 20px;
+}
+.option-panel.active { display: block; }
+
+.option-panel h2 { margin: 0 0 4px 0; font-size: 18px; color: #000; }
+.option-description { margin: 0 0 16px 0; font-size: 13px; color: #666; }
+
+/* Sub-tab Bar */
+.sub-tab-bar {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  padding: 8px 0 12px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 16px;
+}
+.sub-tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 4px 8px 6px;
+  cursor: pointer;
+  color: #666;
+  font-size: 12px;
+  transition: color 0.2s, border-color 0.2s;
+  position: relative;
+}
+.sub-tab-btn svg { width: 24px; height: 24px; }
+.sub-tab-btn span.sub-tab-label { font-size: 12px; }
+
+/* Sub-tab: Wireframe */
+.sub-tab-btn[data-variant="wireframe"] { color: #666; }
+.sub-tab-btn[data-variant="wireframe"]:hover { color: #333; }
+.sub-tab-btn[data-variant="wireframe"].active { color: #000; border-bottom-color: #000; }
+
+/* Sub-tab: Clean — default gray (before Phase 2 CSS loads) */
+.sub-tab-btn[data-variant="clean"] { color: #999; }
+.sub-tab-btn[data-variant="clean"]:hover { color: #999; }
+.sub-tab-btn[data-variant="clean"].active { color: #999; border-bottom-color: #999; }
+
+/* Sub-tab: Polished — default gray (before Phase 2 CSS loads) */
+.sub-tab-btn[data-variant="polished"] { color: #999; }
+.sub-tab-btn[data-variant="polished"]:hover { color: #999; }
+.sub-tab-btn[data-variant="polished"].active { color: #999; border-bottom-color: #999; }
+
+/* Sub-tab Badge */
+.sub-tab-badge {
+  font-size: 9px;
+  background: #f0f0f0;
+  color: #999;
+  border-radius: 8px;
+  padding: 1px 6px;
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  white-space: nowrap;
+}
+
+/* Browser Frame */
+.browser-frame {
+  max-width: 900px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+.browser-chrome {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+  gap: 8px;
+}
+.browser-dots {
+  display: flex;
+  gap: 6px;
+}
+.browser-dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ccc;
+}
+.browser-url {
+  flex: 1;
+  font-size: 12px;
+  color: #999;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+.browser-controls {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+  color: #999;
+}
+.browser-content {
+  padding: 16px;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+/* Mobile Frame Variant */
+.browser-frame.mobile-frame {
+  max-width: 390px;
+  border-radius: 24px;
+  border: 3px solid #333;
+}
+.mobile-frame .browser-chrome {
+  justify-content: center;
+  padding: 6px 12px;
+  background: #fafafa;
+}
+.mobile-frame .browser-chrome .browser-dots,
+.mobile-frame .browser-chrome .browser-controls { display: none; }
+.mobile-frame .browser-url {
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-size: 11px;
+}
+
+/* Annotation System */
+.wf-annotations {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  background: #fafafa;
+}
+.wf-annotations h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #333;
+}
+.wf-annotations ul { margin: 0; padding-left: 20px; }
+.wf-annotations li { font-size: 12px; color: #666; margin-bottom: 4px; }
+
+/* Annotation Hiding — Clean/Polished */
+.clean .wf-annotations,
+.polished .wf-annotations { display: none; }
+
+/* Annotation Markers (inline) */
+.wf-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-size: 10px;
+  color: #666;
+  vertical-align: super;
+  margin-left: 2px;
+}
+
+/* Completion Banner */
+.completion-banner {
+  background: #ffe5c0;
+  text-align: center;
+  font-size: 13px;
+  padding: 10px;
+  animation: bannerSlideDown 0.4s ease-out;
+}
+@keyframes bannerSlideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Footer */
+.skill-footer {
+  text-align: center;
+  font-size: 11px;
+  color: #999;
+  padding: 16px;
+  margin-top: 8px;
+}
+.skill-footer a { color: #666; text-decoration: none; }
+.skill-footer a:hover { text-decoration: underline; }
+
+/* Shared app nav */
+.app-nav { display:flex; align-items:center; justify-content:space-between; padding-bottom:12px; margin-bottom:14px; border-bottom:1px solid #eee; }
+.app-logo { font-weight:600; font-size:14px; color:#000; }
+.app-nav-links { display:flex; gap:18px; }
+.nav-link { font-size:13px; color:#666; text-decoration:none; padding-bottom:4px; }
+.nav-link.active { color:#000; border-bottom:2px solid #000; }
+.app-account { width:26px; height:26px; border-radius:50%; background:#eee; border:1px solid #ccc; display:flex; align-items:center; justify-content:center; font-size:11px; color:#666; }
+
+.btn-primary { background:#000; color:#fff; border:none; border-radius:6px; padding:7px 14px; font-size:12px; cursor:pointer; }
+
+/* Option 1: Week Grid */
+.wk-toolbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.wk-nav { font-size:13px; color:#333; display:flex; gap:8px; align-items:center; }
+.wk-nav a { color:#666; text-decoration:none; }
+.wk-grid { display:grid; grid-template-columns:56px repeat(7, 1fr); border:1px solid #ccc; font-size:11px; }
+.wk-corner { border-bottom:1px solid #ccc; border-right:1px solid #ccc; background:#f9f9f9; }
+.wk-day { padding:6px 4px; text-align:center; font-weight:600; color:#333; border-bottom:1px solid #ccc; border-right:1px solid #eee; background:#f9f9f9; }
+.wk-hour { padding:6px 4px; color:#999; border-right:1px solid #ccc; border-top:1px solid #eee; font-size:10px; }
+.wk-cell { min-height:46px; border-right:1px solid #eee; border-top:1px solid #eee; padding:3px; }
+.event { background:#eee; border:1px solid #ccc; border-radius:4px; padding:4px 5px; font-size:10px; color:#333; }
+.event-alt { background:#f5f5f5; }
+.event-urgent { background:#333; color:#fff; border-color:#333; }
+
+/* Option 2: Dashboard */
+.dash-grid { display:grid; grid-template-columns:1fr 220px; gap:20px; }
+.dash-main h3 { font-size:13px; color:#333; margin:14px 0 8px; }
+.dash-main h3:first-child { margin-top:0; }
+.dash-row { display:flex; gap:12px; padding:7px 0; border-bottom:1px solid #eee; font-size:12px; }
+.dash-time { color:#999; width:70px; flex-shrink:0; }
+.dash-item.urgent { font-weight:600; color:#000; }
+.dash-card { border:1px solid #eee; border-radius:6px; padding:8px 10px; font-size:12px; color:#333; margin-bottom:6px; background:#fafafa; }
+.dash-side { display:flex; flex-direction:column; gap:16px; }
+.mini-cal { border:1px solid #eee; border-radius:6px; padding:10px; }
+.mini-cal-head { font-size:12px; font-weight:600; margin-bottom:8px; color:#333; }
+.mini-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center; font-size:10px; color:#999; }
+.mini-cal-grid .today { background:#000; color:#fff; border-radius:50%; }
+.mini-cal-grid .has-dot { color:#333; border:1px solid #ccc; border-radius:50%; }
+.quick-add { border:1px solid #eee; border-radius:6px; padding:10px; }
+.quick-add label { font-size:11px; color:#666; display:block; margin-bottom:6px; }
+.quick-add input { width:100%; padding:6px; border:1px solid #ccc; border-radius:4px; font-size:12px; margin-bottom:8px; }
+
+/* Option 3: Timeline */
+.day-switcher { display:flex; gap:14px; align-items:center; font-size:13px; margin-bottom:14px; color:#333; }
+.day-switcher a { color:#666; text-decoration:none; }
+.timeline { position:relative; }
+.tl-row { display:grid; grid-template-columns:64px 16px 1fr; align-items:start; }
+.tl-time { font-size:11px; color:#999; padding-top:8px; }
+.tl-line { border-left:2px solid #ccc; height:100%; margin:0 auto; }
+.tl-card { border:1px solid #eee; border-radius:6px; padding:8px 10px; font-size:12px; color:#333; margin:4px 0 14px 8px; background:#fafafa; }
+.tl-card.active { border-color:#999; }
+.tl-card.urgent { background:#333; color:#fff; }
+.tl-detail { font-size:11px; color:#666; margin-top:4px; }
+.tl-card.urgent .tl-detail { color:#eee; }
+
+/* Option 4: Kanban */
+.kanban { display:grid; grid-template-columns:repeat(5, 1fr); gap:10px; }
+.kb-col { border:1px solid #eee; border-radius:6px; padding:8px; min-height:220px; background:#fafafa; }
+.kb-head { font-size:11px; font-weight:600; color:#333; margin-bottom:8px; }
+.kb-card { background:#fff; border:1px solid #ccc; border-radius:5px; padding:6px 7px; font-size:11px; color:#333; margin-bottom:6px; }
+.kb-card.urgent { background:#333; color:#fff; border-color:#333; }
+
+/* Option 5: Command bar */
+.cmd-bar { display:flex; gap:8px; margin-bottom:8px; }
+.cmd-bar input { flex:1; padding:9px 10px; border:1px solid #ccc; border-radius:6px; font-size:13px; }
+.cmd-preview { font-size:11px; color:#666; background:#f5f5f5; border:1px solid #eee; border-radius:6px; padding:6px 10px; margin-bottom:14px; }
+.cmd-grid { display:grid; grid-template-columns:1fr 220px; gap:20px; }
+.cmd-list h3 { font-size:13px; color:#333; margin:0 0 8px; }
+.cmd-item { padding:7px 0; border-bottom:1px solid #eee; font-size:12px; color:#333; }
+.cmd-item.urgent { font-weight:600; color:#000; }
+
+/* Summary */
+.summary-table { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:14px; }
+.summary-table th, .summary-table td { border:1px solid #eee; padding:8px 10px; text-align:left; }
+.summary-table th { background:#fafafa; color:#333; }
+.summary-rec { font-size:13px; color:#333; background:#fafafa; border:1px solid #eee; border-radius:6px; padding:12px; }
+
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+  <div class="title-bar">
+    <span><span id="feature-name">Student Planner</span> &mdash; Wireframe Options</span>
+    <span class="rec">&#9733; Recommended: Option 2</span>
+  </div>
+  <nav class="main-tabs">
+    <button class="tab-btn active" data-tab="option-1">1: Week Grid</button><button class="tab-btn" data-tab="option-2">2: Dashboard-First</button><button class="tab-btn" data-tab="option-3">3: Timeline</button><button class="tab-btn" data-tab="option-4">4: Day Columns</button><button class="tab-btn" data-tab="option-5">5: Quick Add</button><button class="tab-btn" data-tab="summary">Summary</button>
+  </nav>
+  
+  <div class="option-panel active" id="option-1">
+    <h2>Option 1: <span class="opt-name">Week Grid</span></h2>
+    <p class="option-description">Classic hour-by-day calendar grid, extending the Apple Calendar reference from the proposal.</p>
+    <div class="browser-frame wireframe" id="frame-opt1">
+      <div class="browser-chrome">
+        <div class="browser-dots"><span></span><span></span><span></span></div>
+        <div class="browser-url">yourapp.com/planner</div>
+        <div class="browser-controls">&#9472; &#9633; &#10005;</div>
+      </div>
+      <div class="browser-content">
+        
+<div class="app-nav">
+  <div class="app-logo">Student Planner</div>
+  <div class="app-nav-links">
+    <a href="#" class="nav-link active">Planner</a>
+    <a href="#" class="nav-link">Notifications</a>
+    <a href="#" class="nav-link">Settings</a>
+  </div>
+  <div class="app-account">JS</div>
+</div>
+
+<div class="wk-toolbar">
+  <div class="wk-nav"><a href="#">&#8249;</a> <span>Jul 6 &ndash; Jul 12, 2026</span> <a href="#">&#8250;</a></div>
+  <button class="btn-primary">+ Add Event</button>
+</div>
+<div class="wk-grid">
+  <div class="wk-corner"></div>
+  <div class="wk-day">MON 6</div><div class="wk-day">TUE 7</div><div class="wk-day">WED 8</div>
+  <div class="wk-day">THU 9</div><div class="wk-day">FRI 10</div><div class="wk-day">SAT 11</div><div class="wk-day">SUN 12</div>
+
+  <div class="wk-hour">9 AM</div>
+  <div class="wk-cell"><div class="event">CSC 4222 Lecture <span class="wf-marker">1</span></div></div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"><div class="event">CSC 4222 Lecture</div></div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"><div class="event">CSC 4222 Lecture</div></div>
+  <div class="wk-cell"></div><div class="wk-cell"></div>
+
+  <div class="wk-hour">11 AM</div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"><div class="event event-alt">Study Group: Calc II</div></div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"><div class="event event-alt">Career Fair @ Student Ctr</div></div>
+  <div class="wk-cell"></div><div class="wk-cell"></div>
+
+  <div class="wk-hour">2 PM</div>
+  <div class="wk-cell"><div class="event event-urgent">Essay Draft Due &mdash; ENGL 1102 <span class="wf-marker">2</span></div></div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"><div class="event">Lab Report Due &mdash; BIOL 2108</div></div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"></div><div class="wk-cell"></div>
+
+  <div class="wk-hour">5 PM</div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"><div class="event">Advisor Meeting</div></div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"></div>
+  <div class="wk-cell"></div><div class="wk-cell"></div>
+</div>
+
+      </div>
+    </div>
+    <div class="wf-annotations">
+      
+<h3>UX Notes</h3>
+<ul>
+<li><span class="wf-marker">1</span> Tiles sit directly on the hour grid, matching the Apple Calendar reference from the proposal.</li>
+<li><span class="wf-marker">2</span> Deadline-type tiles get a distinct (darker) tile treatment vs. class/meeting tiles.</li>
+</ul>
+
+    </div>
+  </div>
+
+  <div class="option-panel " id="option-2">
+    <h2>Option 2: <span class="opt-name">Dashboard-First</span></h2>
+    <p class="option-description">Leads with a Today panel and upcoming-deadlines list, with the full calendar one click away.</p>
+    <div class="browser-frame wireframe" id="frame-opt2">
+      <div class="browser-chrome">
+        <div class="browser-dots"><span></span><span></span><span></span></div>
+        <div class="browser-url">yourapp.com/planner</div>
+        <div class="browser-controls">&#9472; &#9633; &#10005;</div>
+      </div>
+      <div class="browser-content">
+        
+<div class="app-nav">
+  <div class="app-logo">Student Planner</div>
+  <div class="app-nav-links">
+    <a href="#" class="nav-link active">Planner</a>
+    <a href="#" class="nav-link">Notifications</a>
+    <a href="#" class="nav-link">Settings</a>
+  </div>
+  <div class="app-account">JS</div>
+</div>
+
+<div class="dash-grid">
+  <div class="dash-main">
+    <h3>Today &mdash; Mon, Jul 6</h3>
+    <div class="dash-row"><span class="dash-time">9:00 AM</span><span class="dash-item">CSC 4222 Lecture</span></div>
+    <div class="dash-row"><span class="dash-time">2:00 PM</span><span class="dash-item urgent">Essay Draft Due &mdash; ENGL 1102 <span class="wf-marker">1</span></span></div>
+    <div class="dash-row"><span class="dash-time">6:00 PM</span><span class="dash-item">Roommate Dinner</span></div>
+    <h3>Upcoming Deadlines <span class="wf-marker">2</span></h3>
+    <div class="dash-card"><strong>Lab Report</strong> &mdash; BIOL 2108 &middot; Thu, Jul 9</div>
+    <div class="dash-card"><strong>Group Project Draft</strong> &mdash; CSC 4222 &middot; Fri, Jul 10</div>
+    <div class="dash-card"><strong>Career Fair</strong> &mdash; Student Center &middot; Fri, Jul 10</div>
+  </div>
+  <div class="dash-side">
+    <div class="mini-cal">
+      <div class="mini-cal-head">July 2026</div>
+      <div class="mini-cal-grid">
+        <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+        <span></span><span class="today">6</span><span class="has-dot">7</span><span>8</span><span class="has-dot">9</span><span class="has-dot">10</span><span>11</span>
+      </div>
+    </div>
+    <div class="quick-add">
+      <label>Quick Add</label>
+      <input type="text" placeholder="e.g. Study group, 4pm Weds" />
+      <button class="btn-primary">Add</button>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div>
+    <div class="wf-annotations">
+      
+<h3>UX Notes</h3>
+<ul>
+<li><span class="wf-marker">1</span> Home screen leads with "what matters today," not a full grid &mdash; less scanning for a busy student.</li>
+<li><span class="wf-marker">2</span> Deadlines across the whole week surface on the dashboard even if they aren&rsquo;t today, so nothing slips through.</li>
+</ul>
+
+    </div>
+  </div>
+
+  <div class="option-panel " id="option-3">
+    <h2>Option 3: <span class="opt-name">Timeline</span></h2>
+    <p class="option-description">One day at a time as a scrollable vertical agenda, with tap-to-expand event detail.</p>
+    <div class="browser-frame wireframe" id="frame-opt3">
+      <div class="browser-chrome">
+        <div class="browser-dots"><span></span><span></span><span></span></div>
+        <div class="browser-url">yourapp.com/planner</div>
+        <div class="browser-controls">&#9472; &#9633; &#10005;</div>
+      </div>
+      <div class="browser-content">
+        
+<div class="app-nav">
+  <div class="app-logo">Student Planner</div>
+  <div class="app-nav-links">
+    <a href="#" class="nav-link active">Planner</a>
+    <a href="#" class="nav-link">Notifications</a>
+    <a href="#" class="nav-link">Settings</a>
+  </div>
+  <div class="app-account">JS</div>
+</div>
+
+<div class="day-switcher"><a href="#">&#8249;</a><strong>Tuesday, July 7</strong><a href="#">&#8250;</a></div>
+<div class="timeline">
+  <div class="tl-row"><div class="tl-time">8:00 AM</div><div class="tl-line"></div><div class="tl-card">Gym &mdash; Recreation Center</div></div>
+  <div class="tl-row"><div class="tl-time">10:00 AM</div><div class="tl-line"></div><div class="tl-card active">Study Group: Calc II <span class="wf-marker">1</span>
+    <div class="tl-detail">Library Rm 214 &middot; bring problem set 6</div>
+  </div></div>
+  <div class="tl-row"><div class="tl-time">1:00 PM</div><div class="tl-line"></div><div class="tl-card">Lunch with Sakib</div></div>
+  <div class="tl-row"><div class="tl-time">3:00 PM</div><div class="tl-line"></div><div class="tl-card urgent">Lab Report Due &mdash; BIOL 2108</div></div>
+  <div class="tl-row"><div class="tl-time">7:00 PM</div><div class="tl-line"></div><div class="tl-card">Career Fair Prep <span class="wf-marker">2</span></div></div>
+</div>
+
+      </div>
+    </div>
+    <div class="wf-annotations">
+      
+<h3>UX Notes</h3>
+<ul>
+<li><span class="wf-marker">1</span> Tapping a card expands inline detail instead of navigating away &mdash; keeps the day scroll uninterrupted.</li>
+<li><span class="wf-marker">2</span> One day at a time reduces clutter versus a full grid, at the cost of a slower week overview.</li>
+</ul>
+
+    </div>
+  </div>
+
+  <div class="option-panel " id="option-4">
+    <h2>Option 4: <span class="opt-name">Day Columns</span></h2>
+    <p class="option-description">A weekly board with one column per day and draggable event cards, sized by day for at-a-glance load.</p>
+    <div class="browser-frame wireframe" id="frame-opt4">
+      <div class="browser-chrome">
+        <div class="browser-dots"><span></span><span></span><span></span></div>
+        <div class="browser-url">yourapp.com/planner</div>
+        <div class="browser-controls">&#9472; &#9633; &#10005;</div>
+      </div>
+      <div class="browser-content">
+        
+<div class="app-nav">
+  <div class="app-logo">Student Planner</div>
+  <div class="app-nav-links">
+    <a href="#" class="nav-link active">Planner</a>
+    <a href="#" class="nav-link">Notifications</a>
+    <a href="#" class="nav-link">Settings</a>
+  </div>
+  <div class="app-account">JS</div>
+</div>
+
+<div class="kanban">
+  <div class="kb-col"><div class="kb-head">MON 6</div>
+    <div class="kb-card">CSC 4222 Lecture</div>
+    <div class="kb-card urgent">Essay Draft Due <span class="wf-marker">1</span></div>
+  </div>
+  <div class="kb-col"><div class="kb-head">TUE 7</div>
+    <div class="kb-card">Study Group: Calc II</div>
+  </div>
+  <div class="kb-col"><div class="kb-head">WED 8</div>
+    <div class="kb-card">CSC 4222 Lecture</div>
+    <div class="kb-card">Advisor Meeting</div>
+  </div>
+  <div class="kb-col"><div class="kb-head">THU 9</div>
+    <div class="kb-card urgent">Lab Report Due</div>
+  </div>
+  <div class="kb-col"><div class="kb-head">FRI 10 <span class="wf-marker">2</span></div>
+    <div class="kb-card">CSC 4222 Lecture</div>
+    <div class="kb-card">Career Fair</div>
+    <div class="kb-card">Group Draft Due</div>
+  </div>
+</div>
+
+      </div>
+    </div>
+    <div class="wf-annotations">
+      
+<h3>UX Notes</h3>
+<ul>
+<li><span class="wf-marker">1</span> Cards are drag-reorderable within and across day columns for quick replanning.</li>
+<li><span class="wf-marker">2</span> A busy day (Friday) is visible at a glance by column height, without needing to scroll an hourly grid.</li>
+</ul>
+
+    </div>
+  </div>
+
+  <div class="option-panel " id="option-5">
+    <h2>Option 5: <span class="opt-name">Quick Add</span></h2>
+    <p class="option-description">A natural-language quick-add bar is the entry point, parsing plain text into scheduled events.</p>
+    <div class="browser-frame wireframe" id="frame-opt5">
+      <div class="browser-chrome">
+        <div class="browser-dots"><span></span><span></span><span></span></div>
+        <div class="browser-url">yourapp.com/planner</div>
+        <div class="browser-controls">&#9472; &#9633; &#10005;</div>
+      </div>
+      <div class="browser-content">
+        
+<div class="app-nav">
+  <div class="app-logo">Student Planner</div>
+  <div class="app-nav-links">
+    <a href="#" class="nav-link active">Planner</a>
+    <a href="#" class="nav-link">Notifications</a>
+    <a href="#" class="nav-link">Settings</a>
+  </div>
+  <div class="app-account">JS</div>
+</div>
+
+<div class="cmd-bar">
+  <input type="text" value="Essay due Fri 5pm ENGL 1102" />
+  <button class="btn-primary">Parse &amp; Add</button>
+</div>
+<div class="cmd-preview"><span class="wf-marker">1</span> Detected: <strong>Essay</strong> &middot; Fri, Jul 10 &middot; 5:00 PM &middot; ENGL 1102</div>
+<div class="cmd-grid">
+  <div class="cmd-list">
+    <h3>This Week</h3>
+    <div class="cmd-item">Mon &middot; CSC 4222 Lecture</div>
+    <div class="cmd-item">Tue &middot; Study Group: Calc II</div>
+    <div class="cmd-item urgent">Thu &middot; Lab Report Due</div>
+    <div class="cmd-item urgent">Fri &middot; Essay Due &mdash; ENGL 1102 <span class="wf-marker">2</span></div>
+    <div class="cmd-item">Fri &middot; Career Fair</div>
+  </div>
+  <div class="mini-cal">
+    <div class="mini-cal-head">July 2026</div>
+    <div class="mini-cal-grid">
+      <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+      <span></span><span class="today">6</span><span>7</span><span>8</span><span class="has-dot">9</span><span class="has-dot">10</span><span>11</span>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div>
+    <div class="wf-annotations">
+      
+<h3>UX Notes</h3>
+<ul>
+<li><span class="wf-marker">1</span> Natural-language quick add removes the multi-field form for the common case of "just jot it down."</li>
+<li><span class="wf-marker">2</span> Parsed items still land on a normal list/calendar &mdash; typing fast doesn&rsquo;t replace reviewing the week.</li>
+</ul>
+
+    </div>
+  </div>
+
+  <div class="option-panel" id="summary">
+    
+<h2>Summary</h2>
+<table class="summary-table">
+<tr><th>Option</th><th>Approach</th><th>Overall UX</th></tr>
+<tr><td>1: Week Grid</td><td>Classic grid, matches Apple Calendar reference</td><td>&#9733;&#9733;&#9733;&#9733;&#9734;</td></tr>
+<tr><td>2: Dashboard-First</td><td>Today + deadlines summary as the home screen</td><td>&#9733;&#9733;&#9733;&#9733;&#9733;</td></tr>
+<tr><td>3: Timeline</td><td>Single-day scrollable agenda</td><td>&#9733;&#9733;&#9733;&#9734;&#9734;</td></tr>
+<tr><td>4: Day Columns</td><td>Weekly kanban board, drag to replan</td><td>&#9733;&#9733;&#9733;&#9734;&#9734;</td></tr>
+<tr><td>5: Quick Add</td><td>Natural-language entry bar first</td><td>&#9733;&#9733;&#9733;&#9733;&#9734;</td></tr>
+</table>
+<div class="summary-rec"><strong>Recommendation:</strong> Option 2 (Dashboard-First) best serves the proposal&rsquo;s stated goal &mdash; helping students "stay on top of large workloads" &mdash; because it foregrounds today&rsquo;s items and upcoming deadlines instead of asking the student to scan a full grid. Option 1 (Week Grid) is the safest fallback since it most directly mirrors the Apple Calendar reference named in the proposal.</div>
+
+  </div>
+</div>
+<footer class="skill-footer">Wireframe options for Howard Fletcher &amp; Sakib Jamal&rsquo;s Student Planner proposal</footer>
+<script>
+(function() {
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.option-panel');
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      tabBtns.forEach(function(b) { b.classList.remove('active'); });
+      panels.forEach(function(p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      var target = document.getElementById(btn.dataset.tab);
+      if (target) target.classList.add('active');
+    });
+  });
+})();
+</script>
+</body>
+</html>
